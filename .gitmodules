@@ -1,0 +1,3 @@
+[submodule "ccgame"]
+	path = ccgame
+	url = https://github.com/KUNzfw/ccgame
