@@ -1,3 +1,9 @@
 [submodule "ccgame"]
 	path = ccgame
 	url = https://github.com/KUNzfw/ccgame
+[submodule "thirdparty/cpp-subprocess"]
+	path = thirdparty/cpp-subprocess
+	url = https://github.com/arun11299/cpp-subprocess
+[submodule "bot/cita"]
+	path = bot/cita
+	url = https://github.com/KUNzfw/CitaNoGo
