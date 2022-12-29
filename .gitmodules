@@ -7,3 +7,4 @@
 [submodule "bot/cita"]
 	path = bot/cita
 	url = https://github.com/KUNzfw/CitaNoGo
+	branch = master
