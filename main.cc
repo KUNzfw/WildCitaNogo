@@ -31,6 +31,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     Window window("Snake", WINDOW_WIDTH, WINDOW_HEIGHT);
 
     Font joystix28(std::string(SDL_GetBasePath()) + "assets/joystix.ttf", 28);
+    Font joystix20(std::string(SDL_GetBasePath()) + "assets/joystix.ttf", 20);
     Font joystix14(std::string(SDL_GetBasePath()) + "assets/joystix.ttf", 14);
 
     window.SetBackgroundColor(0xAA, 0xAA, 0xAA, 0xFF);
@@ -212,7 +213,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
           }
         });
 
-    TextView text_bot_thinking("Bot thinking...", &joystix14, WINDOW_WIDTH / 2,
+    TextView text_bot_thinking("Player's turn", &joystix14, WINDOW_WIDTH / 2,
                                WINDOW_HEIGHT - 10);
     text_bot_thinking.SetAlign(CCGAME_ALIGN_CENTER);
     bool text_bot_thinking_state{false};
@@ -281,16 +282,32 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     rect_blur_end.SetBlendMode(SDL_BLENDMODE_BLEND);
     rect_blur_end.SetAlpha(0xCC);
 
-    Font joystix20(std::string(SDL_GetBasePath()) + "assets/joystix.ttf", 20);
-    TextView text_end("YOU DIED!PRESS ANY KEY TO RESTART!", &joystix20,
-                      WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+    TextView text_end("TEMP", &joystix28, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
     text_end.SetAlign(CCGAME_ALIGN_CENTER);
-    text_end.SetOnKeydownListener([&](Context &context, SDL_Keycode keycode) {
-      window.HideGroup(PAGE_END);
+
+    TextView text_end_hint("Click to return to main menu.", &joystix20,
+                           WINDOW_WIDTH / 2, WINDOW_HEIGHT / 3 * 2);
+    text_end_hint.SetAlign(CCGAME_ALIGN_CENTER);
+    text_end_hint.SetOnMouseButtonDownListener(
+        [&](Context &context, Sint32 x, Sint32 y, Uint8 button) {
+          window.HideAllGroup();
+          window.ShowGroup(PAGE_MENU);
+        });
+
+    board.SetOnGameEndListener([&](Context &context) {
+      window.ShowGroup(PAGE_END);
+      GAME_RESULT result{board.GetGameResult()};
+      if (result == GAME_WHITE_WIN) {
+        text_end.SetText(context, "WHITE WIN!");
+      } else if (result == GAME_BLACK_WIN) {
+        text_end.SetText(context, "BLACK WIN!");
+      }
+      board.PauseGame();
     });
 
     window.RegisterView(&rect_blur_end, PAGE_END);
     window.RegisterView(&text_end, PAGE_END);
+    window.RegisterView(&text_end_hint, PAGE_END);
     // PAGE_END end
 
     // init status

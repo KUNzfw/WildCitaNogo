@@ -1,8 +1,10 @@
 #include "board.h"
 
 #include <algorithm>
+#include <utility>
 
 #include "bot.h"
+#include "game.h"
 #include "thirdparty/cpp-subprocess/subprocess.hpp"
 using namespace subprocess;
 
@@ -40,15 +42,16 @@ void Board::OnRender(Context &context) {
     if (!bot_running_) {
       bot_running_ = true;
       std::string data;
+
+      std::stringstream input{};
+      input << history_.size() / 2 + 1 << ' ';
+      if (bot_first_) input << -1 << ' ' << -1 << ' ';
+      for (const auto &p : history_) {
+        input << p.x << ' ' << p.y << ' ';
+      }
+      bot::SetInput(input.str());
+      bot::PrepareRun();
       if (mode_ == GAME_MODE_SINGLE_HARD) {
-        std::stringstream input{};
-        input << history_.size() / 2 + 1 << ' ';
-        if (bot_first_) input << -1 << ' ' << -1 << ' ';
-        for (const auto &p : history_) {
-          input << p.x << ' ' << p.y << ' ';
-        }
-        bot::SetInput(input.str());
-        bot::PrepareRun();
         bot_thread_ =
             SDL_CreateThread(bot::RunHardBot, "HardBot", (void *)&data);
       }
@@ -61,7 +64,10 @@ void Board::OnRender(Context &context) {
         Pos pos{};
         ss >> pos.x >> pos.y;
         place(pos);
+
         bot_running_ = false;
+
+        check_game_end(context);
       }
     }
   }
@@ -78,8 +84,23 @@ void Board::OnMouseButtonDown(Context &context, Sint32 x, Sint32 y,
     int dx = (tx - padding_ + TOLERANCE) % GRID_WIDTH;
     int by = (ty - padding_ + TOLERANCE) / GRID_WIDTH;
     int dy = (ty - padding_ + TOLERANCE) % GRID_WIDTH;
+
     if (dx >= 0 && dx < TOLERANCE * 2 && dy >= 0 && dy < TOLERANCE * 2) {
+      Pos p{bx, by};
+
+      // avoid place stone to a same place
+      if (std::find(history_.begin(), history_.end(), p) != history_.end()) {
+        return;
+      }
+
+      // to make the game easier, player can place only if the place is valid
+      if (!game::JudgeValid(history_, p)) {
+        return;
+      }
+
       place(bx, by);
+
+      check_game_end(context);
     }
   }
 }
@@ -94,8 +115,16 @@ void Board::OnMouseMotion(Context &context, Sint32 x, Sint32 y) {
     int dy = (ty - padding_ + TOLERANCE) % GRID_WIDTH;
     if (dx >= 0 && dx < TOLERANCE * 2 && dy >= 0 && dy < TOLERANCE * 2) {
       Pos p{bx, by};
-      if (std::find(history_.begin(), history_.end(), p) != history_.end())
+      // draw hint only when the place is empty
+      if (std::find(history_.begin(), history_.end(), p) != history_.end()) {
         return;
+      }
+
+      // draw hint only when the place is valid
+      if (!game::JudgeValid(history_, p)) {
+        return;
+      }
+
       draw_board();
       SDL_Color c = history_.size() % 2 != 0 ? CHESS_WHITE : CHESS_BLACK;
       c.a = 0xC0;
@@ -128,3 +157,22 @@ void Board::NewGame(GAME_MODE mode, bool bot_first) {
 void Board::PauseGame() { pause_ = true; }
 void Board::UnpauseGame() { pause_ = false; }
 bool Board::IsBotRunning() const { return bot_running_; }
+void Board::SetOnGameEndListener(
+    std::function<void(Context &context)> listener) {
+  on_game_end_listener = std::move(listener);
+}
+void Board::check_game_end(Context &context) {
+  int game_state = game::Judge(history_);
+  if (game_state != 0) {
+    if (game_state == 1) {
+      game_result_ = GAME_WHITE_WIN;
+    } else if (game_state == -1) {
+      game_result_ = GAME_BLACK_WIN;
+    }
+
+    if (on_game_end_listener != nullptr) {
+      on_game_end_listener(context);
+    }
+  }
+}
+GAME_RESULT Board::GetGameResult() const { return game_result_; }

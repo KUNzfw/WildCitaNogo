@@ -1,6 +1,7 @@
 #ifndef NOGO_BOARD_h_
 #define NOGO_BOARD_h_
 
+#include <functional>
 #include <sstream>
 #include <vector>
 
@@ -55,10 +56,15 @@ class Board : public PaintView {
 
   bool IsBotRunning() const;
 
+  void SetOnGameEndListener(std::function<void(Context &context)> listener);
+
+  GAME_RESULT GetGameResult() const;
+
  private:
   void draw_board();
   int place(int x, int y);
   int place(Pos pos);
+  void check_game_end(Context &context);
 
   std::stringstream data_input{};
   std::stringstream data_output{};
@@ -69,9 +75,13 @@ class Board : public PaintView {
   bool bot_first_{};
   bool bot_running_{false};
 
-  SDL_Thread*bot_thread_{nullptr};
+  SDL_Thread *bot_thread_{nullptr};
 
   std::vector<Pos> history_;
+
+  std::function<void(Context &)> on_game_end_listener{};
+
+  GAME_RESULT game_result_{};
 };
 
 #endif
