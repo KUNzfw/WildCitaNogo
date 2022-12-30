@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "ccgame.h"
+#include "save.h"
 
 using namespace ccgame;
 
@@ -25,11 +26,13 @@ struct Pos {
   bool operator==(const Pos &rval) const { return x == rval.x && y == rval.y; }
 };
 
-enum GAME_MODE {
+enum GAME_MODE : int {
   GAME_MODE_MULTI,
   GAME_MODE_SINGLE_EASY,
   GAME_MODE_SINGLE_HARD
 };
+
+std::string GetModeName(GAME_MODE mode);
 
 enum GAME_RESULT {
   GAME_BLACK_WIN,
@@ -59,6 +62,9 @@ class Board : public PaintView {
   void SetOnGameEndListener(std::function<void(Context &context)> listener);
 
   GAME_RESULT GetGameResult() const;
+
+  void ReadFromSlot(save::SLOT slot);
+  void SaveToSlot(save::SLOT slot);
 
  private:
   void draw_board();

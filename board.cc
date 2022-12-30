@@ -176,3 +176,25 @@ void Board::check_game_end(Context &context) {
   }
 }
 GAME_RESULT Board::GetGameResult() const { return game_result_; }
+void Board::ReadFromSlot(save::SLOT slot) {
+  auto data{save::GetSlotData(slot)};
+  NewGame(data.mode, data.bot_first);
+  history_ = data.history;
+}
+void Board::SaveToSlot(save::SLOT slot) {
+  save::GameData data{mode_, bot_first_, std::chrono::system_clock::now(),
+                      history_};
+  save::SaveToSlot(slot, data);
+}
+std::string GetModeName(GAME_MODE mode) {
+  switch (mode) {
+    case GAME_MODE_MULTI:
+      return "multi-player";
+    case GAME_MODE_SINGLE_EASY:
+      return "single-player easy";
+    case GAME_MODE_SINGLE_HARD:
+      return "single-player hard";
+    default:
+      return "";
+  }
+}
