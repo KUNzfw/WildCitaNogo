@@ -9,11 +9,11 @@ std::string GetPath(SLOT slot) {
   static const auto base_path = std::filesystem::path(SDL_GetBasePath());
   switch (slot) {
     case SLOT1:
-      return base_path / "slot1.txt";
+      return (base_path / "slot1.txt").string();
     case SLOT2:
-      return base_path / "slot2.txt";
+      return (base_path / "slot2.txt").string();
     case SLOT3:
-      return base_path / "slot3.txt";
+      return (base_path / "slot3.txt").string();
     default:
       return "";
   }

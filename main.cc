@@ -31,10 +31,10 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
 
     Window window("Nogo", WINDOW_WIDTH, WINDOW_HEIGHT);
 
-    Font joystix36(base_path / "assets" / "joystix.ttf", 36);
-    Font joystix28(base_path / "assets" / "joystix.ttf", 28);
-    Font joystix20(base_path / "assets" / "joystix.ttf", 20);
-    Font joystix14(base_path / "assets" / "joystix.ttf", 14);
+    Font joystix36((base_path / "assets" / "joystix.ttf").string(), 36);
+    Font joystix28((base_path / "assets" / "joystix.ttf").string(), 28);
+    Font joystix20((base_path / "assets" / "joystix.ttf").string(), 20);
+    Font joystix14((base_path / "assets" / "joystix.ttf").string(), 14);
 
     window.SetBackgroundColor(0xAA, 0xAA, 0xAA, 0xFF);
 
