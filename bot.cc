@@ -1,5 +1,6 @@
 #include "bot.h"
 
+#include <filesystem>
 #include <utility>
 
 #include "thirdparty/cpp-subprocess/subprocess.hpp"
@@ -11,11 +12,43 @@ SDL_SpinLock data_output_lock{0};
 std::string data_output{};
 SDL_SpinLock is_end_lock{0};
 bool is_end{};
+int RunEasyBot(void *data) {
+#ifdef _WIN32
+  std::string path =
+      (std::filesystem::path(SDL_GetBasePath()) / "bot" / "cita" / "Greedy.exe")
+          .string();
+#else
+  std::string path =
+      (std::filesystem::path(SDL_GetBasePath()) / "bot" / "cita" / "Greedy")
+          .string();
+#endif
+
+  auto p = Popen({path}, output{PIPE}, input{PIPE});
+  SDL_AtomicLock(&data_input_lock);
+  p.send(data_input);
+  SDL_AtomicUnlock(&data_input_lock);
+
+  auto res = p.communicate();
+  SDL_AtomicLock(&data_output_lock);
+  data_output = res.first.buf.data();
+  SDL_AtomicUnlock(&data_output_lock);
+
+  SDL_AtomicLock(&is_end_lock);
+  is_end = true;
+  SDL_AtomicUnlock(&is_end_lock);
+  return 0;
+
+  return 0;
+}
 int RunHardBot([[maybe_unused]] void *data) {
 #ifdef _WIN32
-  std::string path = SDL_GetBasePath() + std::string("bot/cita/Cita.exe");
+  std::string path =
+      (std::filesystem::path(SDL_GetBasePath()) / "bot" / "cita" / "Cita.exe")
+          .string();
 #else
-  std::string path = SDL_GetBasePath() + std::string("bot/cita/Cita");
+  std::string path =
+      (std::filesystem::path(SDL_GetBasePath()) / "bot" / "cita" / "Cita")
+          .string();
 #endif
 
   auto p = Popen({path}, output{PIPE}, input{PIPE});

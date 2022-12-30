@@ -6,6 +6,7 @@
 #include "ccgame.h"
 
 namespace bot {
+int RunEasyBot([[maybe_unused]] void* data);
 int RunHardBot([[maybe_unused]] void* data);
 bool IsEnd();
 void PrepareRun();

@@ -7,8 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_subdirectory(ccgame)
 add_subdirectory(bot/cita)
+add_subdirectory(bot/greedy)
 
-add_executable(${PROJECT_NAME} main.cc board.cc bot.cc game.cc save.cc)
+add_executable(${PROJECT_NAME} main.cc board.cc bot.cc game.cc save.cc "bot/greedy/main.cpp")
 target_link_libraries(${PROJECT_NAME} ccgame)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

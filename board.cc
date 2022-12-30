@@ -41,7 +41,6 @@ void Board::OnRender(Context &context) {
   if (mode_ != GAME_MODE_MULTI && (history_.size() % 2 == bot_first_ ? 0 : 1)) {
     if (!bot_running_) {
       bot_running_ = true;
-      std::string data;
 
       std::stringstream input{};
       input << history_.size() / 2 + 1 << ' ';
@@ -52,8 +51,9 @@ void Board::OnRender(Context &context) {
       bot::SetInput(input.str());
       bot::PrepareRun();
       if (mode_ == GAME_MODE_SINGLE_HARD) {
-        bot_thread_ =
-            SDL_CreateThread(bot::RunHardBot, "HardBot", (void *)&data);
+        bot_thread_ = SDL_CreateThread(bot::RunHardBot, "HardBot", nullptr);
+      } else if (mode_ == GAME_MODE_SINGLE_EASY) {
+        bot_thread_ = SDL_CreateThread(bot::RunHardBot, "EasyBot", nullptr);
       }
     } else {
       if (bot::IsEnd() && bot_thread_ != nullptr) {
