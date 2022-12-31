@@ -12,6 +12,11 @@ using namespace ccgame;
 constexpr int WINDOW_WIDTH = 640;
 constexpr int WINDOW_HEIGHT = 480;
 
+SDL_Color COLOR_QUNQIN{0x17, 0x72, 0xB4, 0xFF};
+SDL_Color COLOR_TANGCILAN{0x11, 0x65, 0x9A, 0xFF};
+SDL_Color COLOR_BOLUOHONG{0xFC, 0x79, 0x30, 0xFF};
+SDL_Color COLOR_YANHEHONG{0xFC, 0x63, 0x15, 0xFF};
+
 // to manage all the page
 enum PAGE {
   PAGE_MENU,
@@ -38,7 +43,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     Font joystix20((base_path / "assets" / "joystix.ttf").string(), 20);
     Font joystix14((base_path / "assets" / "joystix.ttf").string(), 14);
 
-    window.SetBackgroundColor(0xAA, 0xAA, 0xAA, 0xFF);
+    window.SetBackgroundColor(0x86, 0x9D, 0x9D, 0xFF);
 
     Board board(120, 40);
 
@@ -46,7 +51,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     RectView button_menu_new_game(
         SDL_Rect{WINDOW_WIDTH / 2, WINDOW_HEIGHT / 4, WINDOW_WIDTH / 5 * 2,
                  WINDOW_HEIGHT / 6},
-        true, SDL_Color{0x33, 0x33, 0xBB, 0xFF});
+        true, COLOR_QUNQIN);
     button_menu_new_game.SetAlign(CCGAME_ALIGN_CENTER);
 
     button_menu_new_game.SetOnMouseButtonDownListener(
@@ -66,7 +71,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     RectView button_menu_load_game(
         SDL_Rect{WINDOW_WIDTH / 2, WINDOW_HEIGHT / 4 * 2, WINDOW_WIDTH / 5 * 2,
                  WINDOW_HEIGHT / 6},
-        true, SDL_Color{0x33, 0x33, 0xBB, 0xFF});
+        true, COLOR_QUNQIN);
     button_menu_load_game.SetAlign(CCGAME_ALIGN_CENTER);
 
     button_menu_load_game.SetOnMouseButtonDownListener(
@@ -112,7 +117,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     RectView button_new_game_multi(
         SDL_Rect{WINDOW_WIDTH / 2, WINDOW_HEIGHT / 4, WINDOW_WIDTH / 5 * 2,
                  WINDOW_HEIGHT / 6},
-        true, SDL_Color{0x33, 0x33, 0xBB, 0xFF});
+        true, COLOR_QUNQIN);
     button_new_game_multi.SetAlign(CCGAME_ALIGN_CENTER);
 
     button_new_game_multi.SetOnMouseButtonDownListener(
@@ -133,7 +138,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     RectView button_new_game_single_easy(
         SDL_Rect{WINDOW_WIDTH / 2, WINDOW_HEIGHT / 4 * 2, WINDOW_WIDTH / 5 * 2,
                  WINDOW_HEIGHT / 6},
-        true, SDL_Color{0x33, 0x33, 0xBB, 0xFF});
+        true, COLOR_TANGCILAN);
     button_new_game_single_easy.SetAlign(CCGAME_ALIGN_CENTER);
 
     button_new_game_single_easy.SetOnMouseButtonDownListener(
@@ -158,7 +163,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     RectView button_new_game_single_hard(
         SDL_Rect{WINDOW_WIDTH / 2, WINDOW_HEIGHT / 4 * 3, WINDOW_WIDTH / 5 * 2,
                  WINDOW_HEIGHT / 6},
-        true, SDL_Color{0x33, 0x33, 0xBB, 0xFF});
+        true, COLOR_BOLUOHONG);
     button_new_game_single_hard.SetAlign(CCGAME_ALIGN_CENTER);
 
     button_new_game_single_hard.SetOnMouseButtonDownListener(
@@ -223,7 +228,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     RectView button_load_game_slot1(
         SDL_Rect{WINDOW_WIDTH / 2, WINDOW_HEIGHT / 4, WINDOW_WIDTH / 3 * 2,
                  WINDOW_HEIGHT / 6},
-        true, SDL_Color{0xFF, 0x81, 0x00, 0xFF});
+        true, COLOR_YANHEHONG);
     button_load_game_slot1.SetAlign(CCGAME_ALIGN_CENTER);
 
     TextView text_load_game_slot1_empty("SLOT 1", &joystix28,
@@ -273,7 +278,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     RectView button_load_game_slot2(
         SDL_Rect{WINDOW_WIDTH / 2, WINDOW_HEIGHT / 4 * 2, WINDOW_WIDTH / 3 * 2,
                  WINDOW_HEIGHT / 6},
-        true, SDL_Color{0xFF, 0x81, 0x00, 0xFF});
+        true, COLOR_YANHEHONG);
     button_load_game_slot2.SetAlign(CCGAME_ALIGN_CENTER);
 
     TextView text_load_game_slot2_empty("SLOT 2", &joystix28,
@@ -323,7 +328,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     RectView button_load_game_slot3(
         SDL_Rect{WINDOW_WIDTH / 2, WINDOW_HEIGHT / 4 * 3, WINDOW_WIDTH / 3 * 2,
                  WINDOW_HEIGHT / 6},
-        true, SDL_Color{0xFF, 0x81, 0x00, 0xFF});
+        true, COLOR_YANHEHONG);
     button_load_game_slot3.SetAlign(CCGAME_ALIGN_CENTER);
 
     TextView text_load_game_slot3_empty("SLOT 3", &joystix28,
@@ -567,7 +572,6 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     context.RegisterWindow(window);
 
     window.Start();
-
 
     return 0;
   } catch (std::runtime_error &e) {

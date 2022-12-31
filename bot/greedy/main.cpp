@@ -1,6 +1,6 @@
-// by Àî¾²ö©
+// by æé™é›¯
 #include <iostream>
-#include <vector>
+#include <cstring>
 using namespace std;
 struct Pos {
   int x, y;
