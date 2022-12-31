@@ -38,6 +38,7 @@ bool judge_next(Pos p, bool black) {
   }
   memset(dfs_air_visit, 0, sizeof(dfs_air_visit));
   result = result && dfs_air(fx, fy);
+  chessBoard[p.x][p.y] = 0;  //
   return result;
 }
 

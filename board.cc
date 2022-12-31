@@ -56,7 +56,7 @@ void Board::OnRender(Context &context) {
       if (mode_ == GAME_MODE_SINGLE_HARD) {
         bot_thread_ = SDL_CreateThread(bot::RunHardBot, "HardBot", nullptr);
       } else if (mode_ == GAME_MODE_SINGLE_EASY) {
-        bot_thread_ = SDL_CreateThread(bot::RunHardBot, "EasyBot", nullptr);
+        bot_thread_ = SDL_CreateThread(bot::RunEasyBot, "EasyBot", nullptr);
       }
     } else {
       if (bot::IsEnd() && bot_thread_ != nullptr) {

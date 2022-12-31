@@ -17,9 +17,9 @@ int RunEasyBot(void *data) {
   static const auto base_path{std::filesystem::path(base_path_raw)};
   SDL_free(base_path_raw);
 #ifdef _WIN32
-  std::string path = (base_path / "bot" / "cita" / "Greedy.exe").string();
+  std::string path = (base_path / "bot" / "greedy" / "Greedy.exe").string();
 #else
-  std::string path = (base_path / "bot" / "cita" / "Greedy").string();
+  std::string path = (base_path / "bot" / "greedy" / "Greedy").string();
 #endif
 
   auto p{Popen({path}, output{PIPE}, input{PIPE})};
