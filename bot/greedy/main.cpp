@@ -1,6 +1,7 @@
 // by 李静雯
-#include <iostream>
 #include <cstring>
+#include <iostream>
+#include <random>
 using namespace std;
 struct Pos {
   int x, y;
@@ -85,7 +86,10 @@ int main() {
   int maxValue = -100;
   for (int i = 0; i < 9; i++) {
     for (int j = 0; j < 9; j++) {
+      Pos p = {i, j};
       if (chessBoard[i][j]) {
+        value[i][j] = -100;
+      } else if (!(judge_next(p, black))) {
         value[i][j] = -100;
       } else {
         chessBoard[i][j] = black ? -1 : 1;
@@ -97,11 +101,28 @@ int main() {
       }
     }
   }
+  int cnt = 0;
   for (int i = 0; i < 9; i++) {
     for (int j = 0; j < 9; j++) {
       if (value[i][j] == maxValue) {
-        cout << i << ' ' << j;
-        exit(0);
+        cnt++;
+      }
+    }
+  }
+  random_device rd;
+  auto seed{rd()};
+  default_random_engine e(seed);
+  uniform_int_distribution d(1, cnt);
+  int num = d(e);
+  int cur = 0;
+  for (int i = 0; i < 9; i++) {
+    for (int j = 0; j < 9; j++) {
+      if (value[i][j] == maxValue) {
+        cur++;
+        if (cur == num) {
+          cout << i << ' ' << j << endl;
+          exit(0);
+        }
       }
     }
   }
