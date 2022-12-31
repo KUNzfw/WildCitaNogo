@@ -6,7 +6,9 @@
 #include "board.h"
 namespace save {
 std::string GetPath(SLOT slot) {
-  static const auto base_path = std::filesystem::path(SDL_GetBasePath());
+  auto base_path_raw{SDL_GetBasePath()};
+  static const auto base_path{std::filesystem::path(base_path_raw)};
+  SDL_free(base_path_raw);
   switch (slot) {
     case SLOT1:
       return (base_path / "slot1.txt").string();

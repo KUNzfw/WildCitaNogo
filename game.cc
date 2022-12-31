@@ -1,9 +1,9 @@
 #include "game.h"
 namespace game {
-int chessBoard[9][9]{};          // ÆåÅÌ
-const int cx[] = {-1, 0, 1, 0};  // ÒÆ¶¯±äÁ¿
+int chessBoard[9][9]{};          // æ£‹ç›˜
+const int cx[] = {-1, 0, 1, 0};  // ç§»åŠ¨å˜é‡
 const int cy[] = {0, -1, 0, 1};
-bool dfs_air_visit[9][9]{};  // ¼ì²â±éÀú
+bool dfs_air_visit[9][9]{};  // æ£€æµ‹éåŽ†
 
 bool inBorder(int x, int y) { return x >= 0 && y >= 0 && x < 9 && y < 9; }
 
@@ -80,8 +80,8 @@ int Judge(std::vector<Pos> history) {
   } else {
     return -1;
   }
-  // Èç¹û»¹Ã»½áÊøÔò·µ»Ø0£¬ºÚÆåÊ¤·µ»Ø-1£¬°×ÆåÊ¤·µ»Ø1
-  // ×¢Òâ£¬µ±Ä³Ò»·½ÎÞ×Ó¿ÉÏÂµÄÊ±ºòÒ²ÅÐ¶ÏÎª½áÊø²¢·µ»ØÁíÒ»·½»ñÊ¤
+  // å¦‚æžœè¿˜æ²¡ç»“æŸåˆ™è¿”å›ž0ï¼Œé»‘æ£‹èƒœè¿”å›ž-1ï¼Œç™½æ£‹èƒœè¿”å›ž1
+  // æ³¨æ„ï¼Œå½“æŸä¸€æ–¹æ— å­å¯ä¸‹çš„æ—¶å€™ä¹Ÿåˆ¤æ–­ä¸ºç»“æŸå¹¶è¿”å›žå¦ä¸€æ–¹èŽ·èƒœ
 }
 
 bool JudgeValid(std::vector<Pos> history, Pos p) {

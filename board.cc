@@ -28,7 +28,10 @@ void Board::draw_board() {
   for (int i = 0; i < history_.size(); i++) {
     int x = history_[i].x * GRID_WIDTH + padding_;
     int y = history_[i].y * GRID_WIDTH + padding_;
-    DrawAACircle(x, y, CHESS_RADIUS, i % 2 == 0 ? CHESS_BLACK : CHESS_WHITE);
+    if (i == history_.size() - 1) {
+      FillAACircle(x, y, CHESS_RADIUS + 2, SDL_Color{0xFF, 0, 0, 0xFF});
+    }
+    FillAACircle(x, y, CHESS_RADIUS, i % 2 == 0 ? CHESS_BLACK : CHESS_WHITE);
   }
 }
 
@@ -113,8 +116,19 @@ void Board::OnMouseMotion(Context &context, Sint32 x, Sint32 y) {
     int dx = (tx - padding_ + TOLERANCE) % GRID_WIDTH;
     int by = (ty - padding_ + TOLERANCE) / GRID_WIDTH;
     int dy = (ty - padding_ + TOLERANCE) % GRID_WIDTH;
-    if (dx >= 0 && dx < TOLERANCE * 2 && dy >= 0 && dy < TOLERANCE * 2) {
-      Pos p{bx, by};
+    Pos p{bx, by};
+    if (!(dx >= 0 && dx < TOLERANCE * 2 && dy >= 0 && dy < TOLERANCE * 2)) {
+      p = Pos{-1, -1};
+    }
+
+    // update only when the hint should be changed
+    if (p == prev_hint_pos) {
+      return;
+    } else {
+      prev_hint_pos = p;
+    }
+
+    if (p.x != -1) {
       // draw hint only when the place is empty
       if (std::find(history_.begin(), history_.end(), p) != history_.end()) {
         return;

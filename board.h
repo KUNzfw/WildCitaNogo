@@ -88,6 +88,8 @@ class Board : public PaintView {
   std::function<void(Context &)> on_game_end_listener{};
 
   GAME_RESULT game_result_{};
+
+  Pos prev_hint_pos{-1, -1};
 };
 
 #endif

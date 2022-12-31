@@ -27,7 +27,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
   try {
     SDL context{CCGAME_INIT_VIDEO, CCGAME_INIT_TTF};
 
-    const auto base_path{std::filesystem::path(SDL_GetBasePath())};
+    auto base_path_raw{SDL_GetBasePath()};
+    const auto base_path{std::filesystem::path(base_path_raw)};
+    SDL_free(base_path_raw);
 
     Window window("Nogo", WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -565,6 +567,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     context.RegisterWindow(window);
 
     window.Start();
+
 
     return 0;
   } catch (std::runtime_error &e) {

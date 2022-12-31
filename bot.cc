@@ -13,22 +13,21 @@ std::string data_output{};
 SDL_SpinLock is_end_lock{0};
 bool is_end{};
 int RunEasyBot(void *data) {
+  auto base_path_raw{SDL_GetBasePath()};
+  static const auto base_path{std::filesystem::path(base_path_raw)};
+  SDL_free(base_path_raw);
 #ifdef _WIN32
-  std::string path =
-      (std::filesystem::path(SDL_GetBasePath()) / "bot" / "cita" / "Greedy.exe")
-          .string();
+  std::string path = (base_path / "bot" / "cita" / "Greedy.exe").string();
 #else
-  std::string path =
-      (std::filesystem::path(SDL_GetBasePath()) / "bot" / "cita" / "Greedy")
-          .string();
+  std::string path = (base_path / "bot" / "cita" / "Greedy").string();
 #endif
 
-  auto p = Popen({path}, output{PIPE}, input{PIPE});
+  auto p{Popen({path}, output{PIPE}, input{PIPE})};
   SDL_AtomicLock(&data_input_lock);
   p.send(data_input);
   SDL_AtomicUnlock(&data_input_lock);
 
-  auto res = p.communicate();
+  auto res{p.communicate()};
   SDL_AtomicLock(&data_output_lock);
   data_output = res.first.buf.data();
   SDL_AtomicUnlock(&data_output_lock);
@@ -37,26 +36,23 @@ int RunEasyBot(void *data) {
   is_end = true;
   SDL_AtomicUnlock(&is_end_lock);
   return 0;
-
-  return 0;
 }
 int RunHardBot([[maybe_unused]] void *data) {
+  auto base_path_raw{SDL_GetBasePath()};
+  static const auto base_path{std::filesystem::path(base_path_raw)};
+  SDL_free(base_path_raw);
 #ifdef _WIN32
-  std::string path =
-      (std::filesystem::path(SDL_GetBasePath()) / "bot" / "cita" / "Cita.exe")
-          .string();
+  std::string path{(base_path / "bot" / "cita" / "Cita.exe").string()};
 #else
-  std::string path =
-      (std::filesystem::path(SDL_GetBasePath()) / "bot" / "cita" / "Cita")
-          .string();
+  std::string path{(base_path / "bot" / "cita" / "Cita").string()};
 #endif
 
-  auto p = Popen({path}, output{PIPE}, input{PIPE});
+  auto p{Popen({path}, output{PIPE}, input{PIPE})};
   SDL_AtomicLock(&data_input_lock);
   p.send(data_input);
   SDL_AtomicUnlock(&data_input_lock);
 
-  auto res = p.communicate();
+  auto res{p.communicate()};
   SDL_AtomicLock(&data_output_lock);
   data_output = res.first.buf.data();
   SDL_AtomicUnlock(&data_output_lock);
@@ -68,7 +64,7 @@ int RunHardBot([[maybe_unused]] void *data) {
 }
 bool IsEnd() {
   SDL_AtomicLock(&is_end_lock);
-  bool result = is_end;
+  bool result{is_end};
   SDL_AtomicUnlock(&is_end_lock);
   return result;
 }
@@ -79,7 +75,7 @@ void PrepareRun() {
 }
 std::string GetOutput() {
   SDL_AtomicLock(&data_output_lock);
-  std::string res = data_output;
+  std::string res{data_output};
   SDL_AtomicUnlock(&data_output_lock);
   return res;
 }
