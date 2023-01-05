@@ -4,6 +4,9 @@
 #include <utility>
 
 #include "thirdparty/cpp-subprocess/subprocess.hpp"
+
+// Used to run bot in new thread.
+
 using namespace subprocess;
 namespace bot {
 SDL_SpinLock data_input_lock{0};

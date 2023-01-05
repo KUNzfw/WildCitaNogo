@@ -1,4 +1,7 @@
 #include "game.h"
+
+// Used to judge the game state.
+
 namespace game {
 int chessBoard[9][9]{};          // 棋盘
 const int cx[] = {-1, 0, 1, 0};  // 移动变量

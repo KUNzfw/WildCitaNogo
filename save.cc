@@ -4,6 +4,9 @@
 #include <fstream>
 
 #include "board.h"
+
+// Used to save and load the game.
+
 namespace save {
 std::string GetPath(SLOT slot) {
   auto base_path_raw{SDL_GetBasePath()};

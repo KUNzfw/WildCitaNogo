@@ -143,8 +143,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
 
     button_new_game_single_easy.SetOnMouseButtonDownListener(
         [&](Context &context, Sint32 x, Sint32 y, Uint8 button) {
-          if (button_new_game_single_easy.IsInside(x, y) &&
-              button == SDL_BUTTON_LEFT) {
+          if (button_new_game_single_easy.IsInside(x, y)) {
             if (button == SDL_BUTTON_LEFT) {
               board.NewGame(GAME_MODE_SINGLE_EASY, false);
             } else if (button == SDL_BUTTON_RIGHT) {
@@ -168,8 +167,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
 
     button_new_game_single_hard.SetOnMouseButtonDownListener(
         [&](Context &context, Sint32 x, Sint32 y, Uint8 button) {
-          if (button_new_game_single_hard.IsInside(x, y) &&
-              button == SDL_BUTTON_LEFT) {
+          if (button_new_game_single_hard.IsInside(x, y)) {
             if (button == SDL_BUTTON_LEFT) {
               board.NewGame(GAME_MODE_SINGLE_HARD, false);
             } else if (button == SDL_BUTTON_RIGHT) {
